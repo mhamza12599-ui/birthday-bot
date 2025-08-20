@@ -1,9 +1,9 @@
 name: Birthday Bot
 
 on:
-  # Daily at 9:00 AM Pakistan time (UTC+5 → 04:00 UTC)
+  # Daily at 2:00 PM CST (UTC-6 → 20:00 UTC)
   schedule:
-    - cron: "0 4 * * *"
+    - cron: "0 20 * * *"
   # Manual trigger for testing
   workflow_dispatch:
 
