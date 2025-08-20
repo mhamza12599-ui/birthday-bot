@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 from datetime import datetime
 
 # ===== CONFIG =====
-TEST_MODE = True             # Use test date instead of today's real date
+TEST_MODE = False             # Use test date instead of today's real date
 TEST_DATE = "10-20"          # Change this for testing birthdays
-TEST_MESSAGE = True          # True = send test message, False = send real message
+TEST_MESSAGE = False          # True = send test message, False = send real message
 
 load_dotenv()
 client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
@@ -103,4 +103,5 @@ if __name__ == "__main__":
             send_birthday_message(person['user_id'], person['name'])
     else:
         print("No birthdays today.")
+
 
