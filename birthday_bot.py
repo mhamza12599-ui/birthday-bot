@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 from datetime import datetime
 
 # ===== CONFIG =====
-TEST_MODE = False            
-TEST_DATE = "10-20"        
-TEST_MESSAGE = False         
+TEST_MODE = True             # Use test date instead of today's real date
+TEST_DATE = "10-20"          # Change this for testing birthdays
+TEST_MESSAGE = True          # True = send test message, False = send real message
 
 load_dotenv()
 client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
@@ -45,29 +45,36 @@ def get_user_profile_image(user_id):
 def send_birthday_message(user_id, name):
     if TEST_MESSAGE:
         # Test message (no profile picture)
-        text = f"🛠️ (TEST) Birthday Bot is working! Pretending it's <@{user_id}>'s birthday 🎉"
+        text = (
+            f"🛠️ (TEST) Birthday Bot is working!\n\n"
+            f":tada: Happy Birthday <@{user_id}>! :tada:\n"
+            f"Wishing you a year filled with bold ideas, big wins, and all the good vibes! "
+            f"Your brilliance lights up the team, today we celebrate you! :partying_face: "
+            f"Let’s make this next chapter your best one yet :rocket:"
+        )
         blocks = [
             {
                 "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": text
-                }
+                "text": {"type": "mrkdwn", "text": text}
             }
         ]
     else:
-        # Real birthday message
-        image_url = get_user_profile_image(user_id)
+        # Real birthday message (with optional profile picture)
+        text = (
+            f":tada: Happy Birthday <@{user_id}>! :tada:\n"
+            f"Wishing you a year filled with bold ideas, big wins, and all the good vibes! "
+            f"Your brilliance lights up the team, today we celebrate you! :partying_face: "
+            f"Let’s make this next chapter your best one yet :rocket:"
+        )
+
         blocks = [
             {
                 "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"🎉 Happy Birthday <@{user_id}>! 🥳 Wishing you an amazing year ahead!"
-                }
+                "text": {"type": "mrkdwn", "text": text}
             }
         ]
 
+        image_url = get_user_profile_image(user_id)
         if image_url:
             blocks.append(
                 {
@@ -96,4 +103,3 @@ if __name__ == "__main__":
             send_birthday_message(person['user_id'], person['name'])
     else:
         print("No birthdays today.")
-
