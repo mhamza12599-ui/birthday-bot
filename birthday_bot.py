@@ -7,8 +7,9 @@ from dotenv import load_dotenv
 from datetime import datetime
 
 # ===== CONFIG =====
-TEST_MODE = False           # Set False to use actual today's date
-TEST_DATE = "10-20"        # Change to a date in MM-DD format for testing
+TEST_MODE = True            # Set True to use TEST_DATE, False for real today's date
+TEST_DATE = "10-20"         # Change to a date in MM-DD format for testing
+TEST_MESSAGE = True         # Set True to send test messages instead of real ones
 
 load_dotenv()
 client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
@@ -42,29 +43,47 @@ def get_user_profile_image(user_id):
         return None
 
 def send_birthday_message(user_id, name):
-    image_url = get_user_profile_image(user_id)
-    blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": f"🎉 Happy Birthday <@{user_id}>! 🥳 Wishing you an amazing year ahead!"
-            }
-        }
-    ]
-
-    if image_url:
-        blocks.append(
+    if TEST_MESSAGE:
+        # Test message (no profile picture)
+        text = f"🛠️ (TEST) Birthday Bot is working! Pretending it's <@{user_id}>'s birthday 🎉"
+        blocks = [
             {
-                "type": "image",
-                "image_url": image_url,
-                "alt_text": f"{name}'s profile picture"
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": text
+                }
             }
-        )
+        ]
+    else:
+        # Real birthday message
+        image_url = get_user_profile_image(user_id)
+        blocks = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"🎉 Happy Birthday <@{user_id}>! 🥳 Wishing you an amazing year ahead!"
+                }
+            }
+        ]
+
+        if image_url:
+            blocks.append(
+                {
+                    "type": "image",
+                    "image_url": image_url,
+                    "alt_text": f"{name}'s profile picture"
+                }
+            )
 
     try:
-        client.chat_postMessage(channel=channel_id, blocks=blocks, text=f"Happy Birthday {name}!")
-        print(f"✅ Sent birthday message with image to {name}")
+        client.chat_postMessage(
+            channel=channel_id,
+            blocks=blocks,
+            text="(TEST) Birthday Bot" if TEST_MESSAGE else f"Happy Birthday {name}!"
+        )
+        print(f"✅ Sent {'test ' if TEST_MESSAGE else ''}message to {name}")
     except SlackApiError as e:
         print(f"❌ Error sending message to {name}: {e.response['error']}")
 
