@@ -47,7 +47,7 @@ def send_birthday_message(user_id, name):
         # Test message (no profile picture)
         text = (
             f"🛠️ (TEST) Birthday Bot is working!\n\n"
-            f":tada: Happy Birthday <@{user_id}>! :tada:\n"
+            f":tada: Happy Birthday <@{user_id}>! :tada:\n\n"
             f"Wishing you a year filled with bold ideas, big wins, and all the good vibes! "
             f"Your brilliance lights up the team, today we celebrate you! :partying_face: "
             f"Let’s make this next chapter your best one yet :rocket:"
@@ -61,7 +61,7 @@ def send_birthday_message(user_id, name):
     else:
         # Real birthday message (with optional profile picture)
         text = (
-            f":tada: Happy Birthday <@{user_id}>! :tada:\n"
+            f":tada: Happy Birthday <@{user_id}>! :tada:\n\n"
             f"Wishing you a year filled with bold ideas, big wins, and all the good vibes! "
             f"Your brilliance lights up the team, today we celebrate you! :partying_face: "
             f"Let’s make this next chapter your best one yet :rocket:"
@@ -103,3 +103,4 @@ if __name__ == "__main__":
             send_birthday_message(person['user_id'], person['name'])
     else:
         print("No birthdays today.")
+
