@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Check out code
-      uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,8 +24,7 @@ jobs:
       - name: Run fetch script
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-        run: |
-          python fetch_users.py
+        run: python fetch_users.py
 
       - name: Upload CSV result
         uses: actions/upload-artifact@v4
