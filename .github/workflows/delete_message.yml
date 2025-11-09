@@ -1,0 +1,40 @@
+name: Delete Slack Message
+
+on:
+  workflow_dispatch:
+    inputs:
+      channel_id:
+        description: "Slack Channel ID (e.g. C091S15JB42)"
+        required: true
+      message_ts:
+        description: "Slack Message Timestamp (e.g. 1762656371.319069)"
+        required: true
+
+jobs:
+  delete-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Slack SDK
+        run: |
+          python -m pip install slack_sdk
+
+      - name: Delete Slack message
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          python - <<EOF
+          from slack_sdk import WebClient
+          import os
+          client = WebClient(token=os.getenv("SLACK_BOT_TOKEN"))
+
+          channel = "${{ github.event.inputs.channel_id }}"
+          ts = "${{ github.event.inputs.message_ts }}"
+
+          response = client.chat_delete(channel=channel, ts=ts)
+          print("✅ Message deleted:", response)
+          EOF
